@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+{% if category %}
+{{category.description|truncatewords:155}}
+{% else %}
+Welcome to Globe Mart store where you can buy different items...
+{% endif  %}
+{% endblock %}
+
+{% block title %}
+{% if category %}
+{{category.name}}-GlobeMart
+{% else %}
+See our new collections-GlobeMart
+{% endif  %}
+{% endblock %}
+
+
+{% block content %}
+{% if category %}
+<div>
+  <div class="row my_row_class">
+    <div class="mx_auto">
+    <p> <a href="{% url 'shop:allProdCat' %}" Our Product collection</a></p>
+  </div>
+    </div>
+</div>
+{% endif  %}
+<div class="mx_auto">
+ {% if category %}
+  <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+</div>
+<br>
+<div>
+  <h1 class="text-center my_title">{{category.name}}</h1>
+  <p class="text-justify">{{category.description}}</p>
+</div>
+{% else %}
+<div>
+  <img class="my_image my_image_padding" src="{% static 'img/banners.png' %}" alt="our products" width="1500px";>
+</div>
+<br>
+<div>
+  <h1 class="text-center my_title"> our products collections</h1>
+  <p class="text-justify"> Global Mart is a prominent retail chain specializing in a wide array of electronics and appliances. Operating across various prime locations globally, the store has garnered a reputation for its top-notch products and exceptional customer service. Upon entering, customers are greeted with an organized layout featuring distinct sections. The electronics section boasts an array of cutting-edge gadgets, from smartphones and laptops to cameras and audio equipment. Complementing this is the appliances section, offering essential household devices like washing machines, microwaves, and air purifiers.
+
+Dedicated spaces are allocated to home entertainment, displaying an array of televisions, sound systems, and gaming consoles. Moreover, Global Mart caters to the rise of smart home technology with a range of IoT devices like smart thermostats and security cameras. Accessories such as headphones, chargers, and laptop bags are available in abundance, enhancing the functionality of electronic devices.
+
+At the heart of Global Mart's ethos is its commitment to customer service. Knowledgeable staff members provide assistance in making informed choices and addressing technical issues. The store extends beyond products, offering warranty options, repair services, and competitive pricing. An online shopping platform further enhances accessibility, while occasional workshops and events provide customers with insights into the latest tech trends and product demonstrations. Overall, Global Mart stands as a reliable haven for quality electronics and appliances, catering to a diverse range of needs and preferences.</p>
+</div>
+{% endif %}
+<div class="container">
+  <div class="row mx_auto">
+    {% for product in products.object_list %}
+    <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-lg-4">
+      <div class="card text-center" style="min-width:18rem;">
+        <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}"></a>
+        <div class="card-body">
+          <h4>{{product.name}}</h4>
+          <p>{{product.price}}</p>
+        </div>
+      </div>
+
+    </div>
+    {% endfor %}
+  </div>
+  <div class="mx_auto">
+    {% if products.paginator.num_pages > 1 %}
+    <hr>
+    <div class="text-center">
+      {% for pg in products.paginator.page_range %}
+      <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+  <br>
+</div>
+
+{% endblock %}
